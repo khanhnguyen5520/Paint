@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -120,6 +121,11 @@ class MainActivity : AppCompatActivity() {
             drawingView.saveCanvasToFile()
         }
 
+        binding.addWidget.setOnClickListener {
+            val intent = Intent(this, WidgetConfigActivity::class.java)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            startActivity(intent)
+        }
     }
 
     private fun showColorPenPopup(alpha: Int) {
