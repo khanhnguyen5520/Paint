@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_layout"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <SeekBar
+        android:id="@+id/seekbarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBlack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/btnRed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="#F3F60000" />
+
+        <ImageButton
+            android:id="@+id/btnOrange"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="@color/orange" />
+
+        <ImageButton
+            android:id="@+id/btnYellow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="@color/yellow" />
+
+        <ImageButton
+            android:id="@+id/btnGreen"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="@color/green" />
+
+        <ImageButton
+            android:id="@+id/btnBlue"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/red_background"
+            android:backgroundTint="@color/blue" />
+
+        <ImageButton
+            android:id="@+id/btnColor"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/bgcolor" />
+
+    </LinearLayout>
+</LinearLayout>
