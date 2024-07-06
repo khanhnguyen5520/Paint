@@ -1,4 +1,4 @@
-package com.lutech.myapplication
+package com.lutech.paintV3
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -73,7 +73,6 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             }
 
             MotionEvent.ACTION_MOVE -> {
-                //drawPath.lineTo(touchX, touchY)
                 when (drawMode) {
                     DrawMode.LINE -> {
                         drawPath.reset()

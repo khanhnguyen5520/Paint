@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.lutech.myapplication"
+    namespace = "com.lutech.paintV3"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.lutech.myapplication"
+        applicationId = "com.lutech.paintV3"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -46,6 +46,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.github.skydoves:colorpickerview:2.3.0")
+
+    implementation(libs.colorpickerview)
 
 }

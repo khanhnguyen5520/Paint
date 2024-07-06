@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:background="@color/white">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,12 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@drawable/done" />
-
-        <Button
-            android:id="@+id/addWidget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Widget" />
 
         <ImageButton
             android:id="@+id/btnUndo"
@@ -53,7 +48,7 @@
         android:layout_margin="10dp"
         android:layout_weight="10">
 
-        <com.lutech.myapplication.DrawingView
+        <com.lutech.paintV3.DrawingView
             android:id="@+id/paint_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -123,24 +118,31 @@
 
         <ImageButton
             android:id="@+id/btnPen"
-            android:layout_width="50dp"
-            android:layout_height="150px"
+            android:layout_width="60dp"
+            android:layout_height="100px"
             android:layout_marginEnd="10dp"
             android:background="@drawable/pen"
             android:backgroundTint="@color/yellow" />
 
         <ImageButton
             android:id="@+id/btnMarker"
-            android:layout_width="50dp"
-            android:layout_height="150px"
+            android:layout_width="60dp"
+            android:layout_height="100px"
             android:layout_marginEnd="10dp"
             android:background="@drawable/marker"
             android:backgroundTint="@color/yellow" />
 
         <ImageButton
             android:id="@+id/btnErase"
-            android:layout_width="50dp"
-            android:layout_height="150px"
+            android:layout_width="60dp"
+            android:layout_height="100px"
             android:background="@drawable/eraser" />
+
+        <Button
+            android:id="@+id/add_widget_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Widget"
+            android:layout_centerInParent="true" />
     </LinearLayout>
 </LinearLayout>

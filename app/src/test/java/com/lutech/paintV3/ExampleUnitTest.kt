@@ -1,4 +1,4 @@
-package com.lutech.myapplication
+package com.lutech.paintV3
 
 import org.junit.Test
 

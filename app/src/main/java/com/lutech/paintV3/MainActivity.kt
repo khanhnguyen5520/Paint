@@ -1,10 +1,12 @@
-package com.lutech.myapplication
+package com.lutech.paintV3
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -12,6 +14,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -33,7 +36,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.button.MaterialButton
-import com.lutech.myapplication.databinding.ActivityMainBinding
+import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -66,13 +69,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnPen.setOnClickListener {
             binding.btnPen.layoutParams = binding.btnPen.layoutParams.apply {
-                height = 200
+                height = 150
             }
             binding.btnMarker.layoutParams = binding.btnMarker.layoutParams.apply {
-                height = 150
+                height = 100
             }
             binding.btnErase.layoutParams = binding.btnErase.layoutParams.apply {
-                height = 150
+                height = 100
             }
             drawingView.setEraser(false)
             showColorPenPopup(256)
@@ -80,26 +83,26 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnMarker.setOnClickListener {
             binding.btnMarker.layoutParams = binding.btnMarker.layoutParams.apply {
-                height = 200
+                height = 150
             }
             binding.btnPen.layoutParams = binding.btnPen.layoutParams.apply {
-                height = 150
+                height = 100
             }
             binding.btnErase.layoutParams = binding.btnErase.layoutParams.apply {
-                height = 150
+                height = 100
             }
             showColorPenPopup(128)
         }
 
         binding.btnErase.setOnClickListener {
             binding.btnErase.layoutParams = binding.btnErase.layoutParams.apply {
-                height = 200
+                height = 150
             }
             binding.btnPen.layoutParams = binding.btnPen.layoutParams.apply {
-                height = 150
+                height = 100
             }
             binding.btnMarker.layoutParams = binding.btnMarker.layoutParams.apply {
-                height = 150
+                height = 100
             }
             showEraserPopup()
         }
@@ -121,10 +124,24 @@ class MainActivity : AppCompatActivity() {
             drawingView.saveCanvasToFile()
         }
 
-        binding.addWidget.setOnClickListener {
-            val intent = Intent(this, WidgetConfigActivity::class.java)
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-            startActivity(intent)
+        val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
+        buttonAddWidget.setOnClickListener {
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
+                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
+                val successCallback = PendingIntent.getBroadcast(
+                    this, 0, pinnedWidgetCallbackIntent,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    } else {
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    }
+                )
+                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+            } else {
+                // Add fallback for devices below Android O or if pinning is not supported
+            }
         }
     }
 

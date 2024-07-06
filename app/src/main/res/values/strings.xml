@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="action_select_all">Select All</string>
-    <string name="action_unselect_all">Unselect All</string>
+    <string name="app_name">Paint</string>
 
 </resources>

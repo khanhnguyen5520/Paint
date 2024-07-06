@@ -20,14 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-
         <activity
-            android:name=".WidgetConfigActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+            android:name=".NoteDetailActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -38,16 +33,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.lutech.myapplication.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-
         <receiver android:name=".NoteWidgetProvider"
             android:exported="true">
             <intent-filter>
@@ -56,9 +41,8 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/note_widget_info" />
+                android:resource="@xml/widget_info" />
         </receiver>
-
     </application>
 
 </manifest>
