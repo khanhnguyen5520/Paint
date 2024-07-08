@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    android:background="@color/white">
+    android:background="#f5f5f5">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -57,7 +57,7 @@
         <LinearLayout
             android:id="@+id/toggleBar"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="16dp"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_line"
+                android:src="@drawable/ic_line2"
                 android:visibility="gone" />
 
 
@@ -134,13 +134,14 @@
 
         <ImageButton
             android:id="@+id/btnErase"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="100px"
-            android:background="@drawable/eraser" />
+            android:background="@drawable/eraser2" />
 
         <Button
             android:id="@+id/add_widget_button"
             android:layout_width="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_height="wrap_content"
             android:text="Add Widget"
             android:layout_centerInParent="true" />

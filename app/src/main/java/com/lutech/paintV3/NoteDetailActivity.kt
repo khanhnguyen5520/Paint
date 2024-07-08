@@ -10,13 +10,14 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class NoteDetailActivity : AppCompatActivity() {
 
     private lateinit var editTextTitle: EditText
     private lateinit var editTextContent: EditText
-    private lateinit var dateTextView:TextView
+    private lateinit var dateTextView: TextView
     private var appWidgetId: Int = AppWidgetManager.INVALID_APPWIDGET_ID
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -31,7 +32,10 @@ class NoteDetailActivity : AppCompatActivity() {
 
 
         // Get the appWidgetId from the intent
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        appWidgetId = intent.getIntExtra(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        )
 
         // Load the current note data
         loadNoteData()
@@ -46,17 +50,19 @@ class NoteDetailActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences("widget_data", Context.MODE_PRIVATE)
         val title = sharedPrefs.getString("widget_title_$appWidgetId", "")
         val content = sharedPrefs.getString("widget_content_$appWidgetId", "")
-        val date = sharedPrefs.getString("widget_date_$appWidgetId","")
+        val date = sharedPrefs.getString("widget_date_$appWidgetId", "")
         editTextTitle.setText(title)
         editTextContent.setText(content)
         dateTextView.text = date
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateNote() {
         val newTitle = editTextTitle.text.toString()
         val newContent = editTextContent.text.toString()
-        val newDate = dateTextView.text.toString()
+        val newDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
 
         // Save the updated note data
         NoteWidgetProvider.updateNoteData(this, appWidgetId, newTitle, newContent, newDate)

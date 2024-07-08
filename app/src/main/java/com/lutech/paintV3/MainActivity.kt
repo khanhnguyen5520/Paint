@@ -13,6 +13,7 @@ import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -32,9 +33,11 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.button.MaterialButton
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.skydoves.colorpickerview.ColorEnvelope
@@ -67,6 +70,34 @@ class MainActivity : AppCompatActivity() {
 
         drawingView = findViewById(R.id.paint_view)
 
+        bottomBar()
+
+        toolBar()
+
+        toggleBar()
+
+        val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
+        buttonAddWidget.setOnClickListener {
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
+                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
+                val successCallback = PendingIntent.getBroadcast(
+                    this, 0, pinnedWidgetCallbackIntent,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    } else {
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    }
+                )
+                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+            } else {
+                // Add fallback for devices below Android O or if pinning is not supported
+            }
+        }
+    }
+
+    private fun bottomBar() {
         binding.btnPen.setOnClickListener {
             binding.btnPen.layoutParams = binding.btnPen.layoutParams.apply {
                 height = 150
@@ -106,7 +137,9 @@ class MainActivity : AppCompatActivity() {
             }
             showEraserPopup()
         }
+    }
 
+    private fun toolBar() {
         binding.btnUndo.setOnClickListener {
             drawingView.undo()
         }
@@ -118,30 +151,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnAddImage.setOnClickListener {
             showBottomSheet()
         }
-        toggleBar()
+
 
         binding.btnSave.setOnClickListener {
             drawingView.saveCanvasToFile()
-        }
-
-        val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
-        buttonAddWidget.setOnClickListener {
-            val appWidgetManager = AppWidgetManager.getInstance(this)
-            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
-                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
-                val successCallback = PendingIntent.getBroadcast(
-                    this, 0, pinnedWidgetCallbackIntent,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                    } else {
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    }
-                )
-                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-            } else {
-                // Add fallback for devices below Android O or if pinning is not supported
-            }
         }
     }
 
@@ -156,11 +169,12 @@ class MainActivity : AppCompatActivity() {
 
         // show the popup window
         currentPopup!!.showAtLocation(binding.root, Gravity.BOTTOM, 0, 400)
-
+        val wavyLine = popupView.findViewById<ImageView>(R.id.wavyLine)
         val seekBar = popupView.findViewById<SeekBar>(R.id.seekbarSize)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 drawingView.setStrokeWidth(progress.toFloat())
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -194,6 +208,8 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
             }
+            val tintedDrawable = changeSvgColor(R.drawable.wavyline, Color.RED)
+            wavyLine.setImageDrawable(tintedDrawable)
         }
 
         val btnOrange = popupView.findViewById<ImageButton>(R.id.btnOrange)
@@ -241,6 +257,14 @@ class MainActivity : AppCompatActivity() {
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
             }
         }
+    }
+
+    fun changeSvgColor(drawableResId: Int, color: Int): Drawable? {
+        val drawable = AppCompatResources.getDrawable(this, drawableResId)?.mutate()
+        drawable?.let {
+            DrawableCompat.setTint(it, color)
+        }
+        return drawable
     }
 
     private fun openColorPicker(alpha: Int) {
@@ -324,7 +348,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun toggleBar() {
 
-        binding.toggleBar.setOnClickListener {
+        binding.toggleButton.setOnClickListener {
             if (isExpanded) {
                 collapseToolBar()
             } else {

@@ -9,13 +9,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_blue"
-        android:padding="10dp"
+        android:background="#2da7fd"
+        android:gravity="center_vertical"
+        android:padding="7dp"
         android:weightSum="12">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
             android:layout_weight="10"
             android:text="Tất cả ghi chú"
             android:textColor="@color/white" />
@@ -29,8 +31,8 @@
 
         <ImageView
             android:id="@+id/btnSetting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_setting" />
 
@@ -61,7 +63,7 @@
             android:maxLines="3"
             android:text="Content"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/widget_date"
@@ -71,7 +73,7 @@
             android:maxLines="3"
             android:text="Date"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 </LinearLayout>

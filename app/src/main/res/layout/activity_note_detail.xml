@@ -2,14 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fce49e"
     android:orientation="vertical"
-    android:background="@color/white"
     android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="date" />
 
     <EditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:hint="Title"
         android:textSize="18sp" />
 
@@ -17,19 +24,16 @@
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:hint="Content"
-        android:textSize="16sp"
-        android:inputType="textMultiLine" />
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="date"/>
+        android:inputType="textMultiLine"
+        android:textSize="16sp" />
+
 
     <Button
         android:id="@+id/buttonUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Update" />
 </LinearLayout>

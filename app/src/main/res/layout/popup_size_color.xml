@@ -6,6 +6,12 @@
     android:orientation="vertical"
     android:padding="15dp">
 
+    <ImageView
+        android:id="@+id/wavyLine"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/wavyline"
+        android:layout_gravity="center"/>
     <SeekBar
         android:id="@+id/seekbarSize"
         android:layout_width="match_parent"
