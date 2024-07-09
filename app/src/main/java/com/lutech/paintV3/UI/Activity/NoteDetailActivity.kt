@@ -1,4 +1,4 @@
-package com.lutech.paintV3
+package com.lutech.paintV3.UI.Activity
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.lutech.paintV3.NoteWidgetProvider
+import com.lutech.paintV3.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

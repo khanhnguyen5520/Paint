@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f5f5f5"
     android:orientation="vertical"
-    android:weightSum="10"
-    android:background="#f5f5f5">
+    android:weightSum="10">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,29 +23,28 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/undo" />
+            android:background="@drawable/ic_undo" />
 
         <ImageButton
             android:id="@+id/btnRedo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/redo" />
+            android:background="@drawable/ic_redo" />
 
         <ImageButton
             android:id="@+id/btnAddImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="10dp"
-            android:background="@drawable/add_image" />
+            android:background="@drawable/ic_add_image" />
     </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
         android:id="@+id/paintView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
         android:layout_weight="10">
 
         <com.lutech.paintV3.DrawingView
@@ -55,7 +54,6 @@
             android:background="#FFFFFF" />
 
         <LinearLayout
-            android:id="@+id/toggleBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -69,50 +67,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_expand_more" />
+                android:src="@drawable/ic_expand_less" />
 
-            <ImageButton
-                android:id="@+id/btnDraw"
+            <LinearLayout
+                android:id="@+id/toggleBar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_draw"
-                android:visibility="gone" />
+                android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/btnLine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_line2"
-                android:visibility="gone" />
+                <ImageButton
+                    android:id="@+id/btnDraw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_doodle" />
 
+                <ImageButton
+                    android:id="@+id/btnLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_line" />
 
-            <ImageButton
-                android:id="@+id/btnRectangle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_square"
-                android:visibility="gone" />
+                <ImageButton
+                    android:id="@+id/btnCircle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_circle" />
 
-            <ImageButton
-                android:id="@+id/btnCircle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_circle"
-                android:visibility="gone" />
+                <ImageButton
+                    android:id="@+id/btnRectangle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_square" />
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:gravity="bottom|center_horizontal"
         android:orientation="horizontal">
 
@@ -126,24 +126,23 @@
 
         <ImageButton
             android:id="@+id/btnMarker"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="100px"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/marker"
+            android:background="@drawable/ic_marker"
             android:backgroundTint="@color/yellow" />
 
         <ImageButton
             android:id="@+id/btnErase"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="100px"
-            android:background="@drawable/eraser2" />
+            android:background="@drawable/eraser" />
 
         <Button
             android:id="@+id/add_widget_button"
             android:layout_width="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_height="wrap_content"
-            android:text="Add Widget"
-            android:layout_centerInParent="true" />
+            android:layout_marginStart="20dp"
+            android:text="Add Widget" />
     </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,8 @@
-package com.lutech.paintV3
+package com.lutech.paintV3.UI.Activity
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -12,8 +11,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,8 +20,6 @@ import android.provider.MediaStore
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -33,12 +29,14 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.lutech.paintV3.DrawingView
+import com.lutech.paintV3.NoteWidgetProvider
+import com.lutech.paintV3.R
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
@@ -57,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 2
     private val REQUEST_CAMERA_PERMISSION = 3
     private var currentPopup: PopupWindow? = null
-    private var isExpanded = false
+    private var isExpanded = true
     private lateinit var seekBar: SeekBar
 
     private lateinit var currentPhotoPath: String
@@ -71,9 +69,7 @@ class MainActivity : AppCompatActivity() {
         drawingView = findViewById(R.id.paint_view)
 
         bottomBar()
-
         toolBar()
-
         toggleBar()
 
         val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
@@ -91,8 +87,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 )
                 appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-            } else {
-                // Add fallback for devices below Android O or if pinning is not supported
             }
         }
     }
@@ -168,13 +162,12 @@ class MainActivity : AppCompatActivity() {
         currentPopup!!.elevation = 5f
 
         // show the popup window
-        currentPopup!!.showAtLocation(binding.root, Gravity.BOTTOM, 0, 400)
+        currentPopup!!.showAtLocation(binding.root, Gravity.BOTTOM, 0, 300)
         val wavyLine = popupView.findViewById<ImageView>(R.id.wavyLine)
         val seekBar = popupView.findViewById<SeekBar>(R.id.seekbarSize)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 drawingView.setStrokeWidth(progress.toFloat())
-
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -186,8 +179,7 @@ class MainActivity : AppCompatActivity() {
             openColorPicker(alpha)
         }
 
-        val btnBlack = popupView.findViewById<ImageButton>(R.id.btnBlack)
-        btnBlack.setOnClickListener {
+        popupView.findViewById<ImageButton>(R.id.btnBlack).setOnClickListener {
             drawingView.setColor(Color.BLACK, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -196,10 +188,16 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
             }
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN
+            )
 
         }
-        val btnRed = popupView.findViewById<ImageButton>(R.id.btnRed)
-        btnRed.setOnClickListener {
+
+        popupView.findViewById<ImageButton>(R.id.btnRed).setOnClickListener {
             drawingView.setColor(Color.RED, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -208,12 +206,19 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
             }
-            val tintedDrawable = changeSvgColor(R.drawable.wavyline, Color.RED)
-            wavyLine.setImageDrawable(tintedDrawable)
+
+            wavyLine.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_IN
+            )
         }
 
-        val btnOrange = popupView.findViewById<ImageButton>(R.id.btnOrange)
-        btnOrange.setOnClickListener {
+        popupView.findViewById<ImageButton>(R.id.btnOrange).setOnClickListener {
             drawingView.setColor(R.color.orange, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -222,10 +227,18 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
             }
+            wavyLine.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
+
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.orange), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.orange), PorterDuff.Mode.SRC_IN
+            )
         }
 
-        val btnYellow = popupView.findViewById<ImageButton>(R.id.btnYellow)
-        btnYellow.setOnClickListener {
+        popupView.findViewById<ImageButton>(R.id.btnYellow).setOnClickListener {
             drawingView.setColor(Color.YELLOW, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -234,9 +247,19 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.yellow))
             }
+
+            wavyLine.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.yellow))
+
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.yellow), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.yellow), PorterDuff.Mode.SRC_IN
+            )
         }
-        val btnGreen = popupView.findViewById<ImageButton>(R.id.btnGreen)
-        btnGreen.setOnClickListener {
+
+        popupView.findViewById<ImageButton>(R.id.btnGreen).setOnClickListener {
             drawingView.setColor(Color.GREEN, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -245,9 +268,17 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
             }
+            wavyLine.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.green), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.green), PorterDuff.Mode.SRC_IN
+            )
         }
-        val btnBlue = popupView.findViewById<ImageButton>(R.id.btnBlue)
-        btnBlue.setOnClickListener {
+
+        popupView.findViewById<ImageButton>(R.id.btnBlue).setOnClickListener {
             drawingView.setColor(Color.BLUE, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
@@ -256,15 +287,15 @@ class MainActivity : AppCompatActivity() {
                 binding.btnMarker.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
             }
+            wavyLine.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
+            seekBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(this, R.color.blue), PorterDuff.Mode.SRC_IN
+            )
+            seekBar.thumb.setColorFilter(
+                ContextCompat.getColor(this, R.color.blue), PorterDuff.Mode.SRC_IN
+            )
         }
-    }
-
-    fun changeSvgColor(drawableResId: Int, color: Int): Drawable? {
-        val drawable = AppCompatResources.getDrawable(this, drawableResId)?.mutate()
-        drawable?.let {
-            DrawableCompat.setTint(it, color)
-        }
-        return drawable
     }
 
     private fun openColorPicker(alpha: Int) {
@@ -283,6 +314,7 @@ class MainActivity : AppCompatActivity() {
         val brightnessSlideBar = popupView.findViewById<BrightnessSlideBar>(R.id.brightnessSlide)
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
+            @SuppressLint("ResourceType")
             override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
                 drawingView.setColor(envelope!!.color, alpha)
             }
@@ -364,6 +396,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnCircle.setOnClickListener {
             drawingView.setMode("CIRCLE")
+            binding.btnCircle.setBackgroundColor(Color.parseColor("#d8e8f5"))
         }
         binding.btnLine.setOnClickListener {
             drawingView.setMode("LINE")
@@ -371,78 +404,59 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun collapseToolBar() {
-        binding.btnRectangle.visibility = View.GONE
-        binding.btnDraw.visibility = View.GONE
-        binding.btnCircle.visibility = View.GONE
-        binding.btnLine.visibility = View.GONE
+        binding.toggleBar.visibility = View.GONE
         binding.toggleButton.setImageResource(R.drawable.ic_expand_more)
-        isExpanded = false
+        isExpanded = !isExpanded
     }
 
     private fun expandToolBar() {
-        binding.btnRectangle.visibility = View.VISIBLE
-        binding.btnDraw.visibility = View.VISIBLE
-        binding.btnCircle.visibility = View.VISIBLE
-        binding.btnLine.visibility = View.VISIBLE
+        binding.toggleBar.visibility = View.VISIBLE
         binding.toggleButton.setImageResource(R.drawable.ic_expand_less)
-        isExpanded = true
+        isExpanded = !isExpanded
     }
 
     private fun showBottomSheet() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.bottom_sheet)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_photo, null)
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
 
-        dialog.findViewById<LinearLayout>(R.id.takePhoto).setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.CAMERA),
-                    REQUEST_CAMERA_PERMISSION
-                )
-            } else {
-                dispatchTakePictureIntent()
-            }
-            dialog.dismiss()
+        val btnGallery = bottomSheetView.findViewById<LinearLayout>(R.id.btnGallery)
+        btnGallery.setOnClickListener {
+            openGallery()
+            bottomSheetDialog.dismiss()
         }
 
-        dialog.findViewById<LinearLayout>(R.id.takeGallery).setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, PICK_IMAGE_GALLERY)
-            dialog.dismiss()
+        val btnCamera = bottomSheetView.findViewById<LinearLayout>(R.id.btnCamera)
+        btnCamera.setOnClickListener {
+            openCamera()
+            bottomSheetDialog.dismiss()
         }
 
-        dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-            dialog.dismiss()
+        val btnCancel = bottomSheetView.findViewById<Button>(R.id.btnCancel)
+        btnCancel.setOnClickListener {
+            bottomSheetDialog.dismiss()
         }
-        dialog.show()
-        dialog.window!!.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window!!.setGravity(Gravity.BOTTOM)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val imageUri = data.data
-            val inputStream = contentResolver.openInputStream(imageUri!!)
-            val options = BitmapFactory.Options()
-            options.inSampleSize = 3
-            val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
-            drawingView.loadBitmap(bitmap!!)
-        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val options = BitmapFactory.Options()
-            options.inSampleSize = 3
-            val bitmap = BitmapFactory.decodeFile(currentPhotoPath, options)
-            drawingView.loadBitmap(bitmap)
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_GALLERY)
+    }
+
+    private fun openCamera() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                REQUEST_CAMERA_PERMISSION
+            )
+        } else {
+            dispatchTakePictureIntent()
         }
     }
 
@@ -457,7 +471,7 @@ class MainActivity : AppCompatActivity() {
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         this,
-                        "com.lutech.myapplication.fileprovider",
+                        "com.lutech.paintV3.fileprovider",
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -467,7 +481,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
@@ -498,9 +511,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri = data.data
+            val inputStream = contentResolver.openInputStream(imageUri!!)
+            val options = BitmapFactory.Options()
+            options.inSampleSize = 3
+            val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
+            drawingView.loadBitmap(bitmap!!)
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            val options = BitmapFactory.Options()
+            options.inSampleSize = 3
+            val bitmap = BitmapFactory.decodeFile(currentPhotoPath, options)
+            drawingView.loadBitmap(bitmap)
+        }
+    }
 }
-
-
-
-
-

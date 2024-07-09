@@ -2,7 +2,13 @@ package com.lutech.paintV3
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
 import android.os.Environment
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -60,6 +66,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+
         val touchX = event.x
         val touchY = event.y
         when (event.action) {

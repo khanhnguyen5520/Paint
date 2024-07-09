@@ -1,4 +1,4 @@
-package com.lutech.paintV3
+package com.lutech.paintV3.model
 
 data class Note(
     val id: Int = 0,

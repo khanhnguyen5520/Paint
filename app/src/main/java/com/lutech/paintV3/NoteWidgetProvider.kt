@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
+import com.lutech.paintV3.UI.Activity.MainActivity
+import com.lutech.paintV3.UI.Activity.NoteDetailActivity
 
 class NoteWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(
