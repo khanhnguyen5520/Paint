@@ -21,7 +21,7 @@ import kotlin.math.hypot
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var drawPath = Path()
-    private var drawPaint = Paint()
+    var drawPaint = Paint()
     private var canvasPaint: Paint? = null
     private var drawCanvas: Canvas? = null
     private var canvasBitmap: Bitmap? = null
@@ -31,9 +31,8 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var strokeWidth = 5f
     private var drawMode = DrawMode.NORMAL
 
-    private var startX: Float = 0f
-    private var startY: Float = 0f
-    private var brushSize: Float = 10f
+    private var startX = 0f
+    private var startY = 0f
 
     init {
         setupDrawing()
@@ -128,6 +127,19 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         drawPaint.alpha = alpha
     }
 
+    fun setStrokeWidth(newSize: Float) {
+        strokeWidth = newSize
+        drawPaint.strokeWidth = strokeWidth
+    }
+
+    fun setStrokeCap(newCap: String) {
+        if (newCap == "ROUND") {
+            drawPaint.strokeCap = Paint.Cap.ROUND
+        } else {
+            drawPaint.strokeCap = Paint.Cap.SQUARE
+        }
+    }
+
     fun setEraser(isEraser: Boolean) {
         if (isEraser) {
             drawPaint.color = Color.WHITE
@@ -183,6 +195,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     fun setMode(mode: String) {
+        setEraser(false)
         drawMode = when (mode) {
             "LINE" -> {
                 DrawMode.LINE
@@ -200,11 +213,6 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
                 DrawMode.NORMAL
             }
         }
-    }
-
-    fun setStrokeWidth(newSize: Float) {
-        brushSize = newSize
-        drawPaint.strokeWidth = brushSize
     }
 
     fun deleteAll() {

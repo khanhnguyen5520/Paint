@@ -37,6 +37,7 @@ import com.google.android.material.button.MaterialButton
 import com.lutech.paintV3.DrawingView
 import com.lutech.paintV3.NoteWidgetProvider
 import com.lutech.paintV3.R
+import com.lutech.paintV3.StrokeWidthView
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
@@ -50,6 +51,7 @@ import java.util.Date
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawingView: DrawingView
+    private lateinit var strokeView: StrokeWidthView
     private lateinit var binding: ActivityMainBinding
     private val PICK_IMAGE_GALLERY = 1
     private val REQUEST_IMAGE_CAPTURE = 2
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     private var currentPopup: PopupWindow? = null
     private var isExpanded = true
     private lateinit var seekBar: SeekBar
+
 
     private lateinit var currentPhotoPath: String
 
@@ -93,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun bottomBar() {
         binding.btnPen.setOnClickListener {
+            drawingView.drawPaint.alpha = 256
             binding.btnPen.layoutParams = binding.btnPen.layoutParams.apply {
                 height = 150
             }
@@ -103,10 +107,11 @@ class MainActivity : AppCompatActivity() {
                 height = 100
             }
             drawingView.setEraser(false)
-            showColorPenPopup(256)
+            showColorPenPopup(256, "ROUND")
         }
 
         binding.btnMarker.setOnClickListener {
+            drawingView.drawPaint.alpha = 128
             binding.btnMarker.layoutParams = binding.btnMarker.layoutParams.apply {
                 height = 150
             }
@@ -116,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             binding.btnErase.layoutParams = binding.btnErase.layoutParams.apply {
                 height = 100
             }
-            showColorPenPopup(128)
+            showColorPenPopup(128, "SQUARE")
         }
 
         binding.btnErase.setOnClickListener {
@@ -152,7 +157,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showColorPenPopup(alpha: Int) {
+    private fun showColorPenPopup(alpha: Int, style: String) {
+        drawingView.setStrokeCap(style)
+
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_size_color, null)
 
@@ -163,19 +170,22 @@ class MainActivity : AppCompatActivity() {
 
         // show the popup window
         currentPopup!!.showAtLocation(binding.root, Gravity.BOTTOM, 0, 300)
-        val wavyLine = popupView.findViewById<ImageView>(R.id.wavyLine)
-        val seekBar = popupView.findViewById<SeekBar>(R.id.seekbarSize)
+
+        strokeView = popupView.findViewById(R.id.M_view)
+        strokeView.setStrokeCap(style)
+
+        seekBar = popupView.findViewById(R.id.seekbarSize)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 drawingView.setStrokeWidth(progress.toFloat())
+                strokeView.setStrokeWidth(progress.toFloat())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        val btnColor = popupView.findViewById<ImageView>(R.id.btnColor)
-        btnColor.setOnClickListener {
+        popupView.findViewById<ImageView>(R.id.btnColor).setOnClickListener {
             openColorPicker(alpha)
         }
 
@@ -183,118 +193,104 @@ class MainActivity : AppCompatActivity() {
             drawingView.setColor(Color.BLACK, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
+                    ColorStateList.valueOf(Color.BLACK)
             } else {
                 binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
+                    ColorStateList.valueOf(Color.BLACK)
             }
             seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN
+                Color.BLACK, PorterDuff.Mode.SRC_IN
             )
             seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN
+                Color.BLACK, PorterDuff.Mode.SRC_IN
             )
-
+            strokeView.setColor(Color.BLACK)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnRed).setOnClickListener {
             drawingView.setColor(Color.RED, alpha)
             if (alpha == 256) {
-                binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+                binding.btnPen.backgroundTintList = ColorStateList.valueOf(Color.RED)
             } else {
-                binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+                binding.btnMarker.backgroundTintList = ColorStateList.valueOf(Color.RED)
             }
 
-            wavyLine.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
-
-            seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_IN
-            )
-            seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_IN
-            )
+            seekBar.progressDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
+            seekBar.thumb.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
+            strokeView.setColor(Color.RED)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnOrange).setOnClickListener {
-            drawingView.setColor(R.color.orange, alpha)
+            drawingView.setColor(Color.parseColor("#FFB74D"), alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
+                    ColorStateList.valueOf(Color.parseColor("#FFB74D"))
             } else {
                 binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
+                    ColorStateList.valueOf(Color.parseColor("#FFB74D"))
             }
-            wavyLine.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
 
             seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.orange), PorterDuff.Mode.SRC_IN
+                Color.parseColor("#FFB74D"),
+                PorterDuff.Mode.SRC_IN
             )
-            seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.orange), PorterDuff.Mode.SRC_IN
-            )
+            seekBar.thumb.setColorFilter(Color.parseColor("#FFB74D"), PorterDuff.Mode.SRC_IN)
+            strokeView.setColor(Color.parseColor("#FFB74D"))
         }
 
         popupView.findViewById<ImageButton>(R.id.btnYellow).setOnClickListener {
             drawingView.setColor(Color.YELLOW, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.yellow))
+                    ColorStateList.valueOf(Color.YELLOW)
             } else {
                 binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.yellow))
+                    ColorStateList.valueOf(Color.YELLOW)
             }
 
-            wavyLine.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.yellow))
-
             seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.yellow), PorterDuff.Mode.SRC_IN
+                Color.YELLOW, PorterDuff.Mode.SRC_IN
             )
             seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.yellow), PorterDuff.Mode.SRC_IN
+                Color.YELLOW, PorterDuff.Mode.SRC_IN
             )
+            strokeView.setColor(Color.YELLOW)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnGreen).setOnClickListener {
             drawingView.setColor(Color.GREEN, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
+                    ColorStateList.valueOf(Color.GREEN)
             } else {
                 binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
+                    ColorStateList.valueOf(Color.GREEN)
             }
-            wavyLine.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
             seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.green), PorterDuff.Mode.SRC_IN
+                Color.GREEN, PorterDuff.Mode.SRC_IN
             )
             seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.green), PorterDuff.Mode.SRC_IN
+                Color.GREEN, PorterDuff.Mode.SRC_IN
             )
+            strokeView.setColor(Color.GREEN)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnBlue).setOnClickListener {
             drawingView.setColor(Color.BLUE, alpha)
             if (alpha == 256) {
                 binding.btnPen.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
+                    ColorStateList.valueOf(Color.BLUE)
             } else {
                 binding.btnMarker.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
+                    ColorStateList.valueOf(Color.BLUE)
             }
-            wavyLine.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
             seekBar.progressDrawable.setColorFilter(
-                ContextCompat.getColor(this, R.color.blue), PorterDuff.Mode.SRC_IN
+                Color.BLUE, PorterDuff.Mode.SRC_IN
             )
             seekBar.thumb.setColorFilter(
-                ContextCompat.getColor(this, R.color.blue), PorterDuff.Mode.SRC_IN
+                Color.BLUE, PorterDuff.Mode.SRC_IN
             )
+            strokeView.setColor(Color.BLUE)
         }
     }
 
@@ -315,8 +311,15 @@ class MainActivity : AppCompatActivity() {
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             @SuppressLint("ResourceType")
-            override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
-                drawingView.setColor(envelope!!.color, alpha)
+            override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                drawingView.setColor(envelope.color, alpha)
+                strokeView.setColor(envelope.color)
+                seekBar.progressDrawable.setColorFilter(
+                    envelope.color, PorterDuff.Mode.SRC_IN
+                )
+                seekBar.thumb.setColorFilter(
+                    envelope.color, PorterDuff.Mode.SRC_IN
+                )
             }
         })
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
@@ -381,6 +384,7 @@ class MainActivity : AppCompatActivity() {
     private fun toggleBar() {
 
         binding.toggleButton.setOnClickListener {
+
             if (isExpanded) {
                 collapseToolBar()
             } else {
@@ -389,17 +393,32 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnRectangle.setOnClickListener {
             drawingView.setMode("RECTANGLE")
+            binding.btnRectangle.setBackgroundColor(Color.parseColor("#d8e8f5"))
+            binding.btnLine.background = null
+            binding.btnCircle.background = null
+            binding.btnDoodle.background = null
         }
 
-        binding.btnDraw.setOnClickListener {
+        binding.btnDoodle.setOnClickListener {
             drawingView.setMode("NORMAL")
+            binding.btnDoodle.setBackgroundColor(Color.parseColor("#d8e8f5"))
+            binding.btnLine.background = null
+            binding.btnCircle.background = null
+            binding.btnRectangle.background = null
         }
         binding.btnCircle.setOnClickListener {
             drawingView.setMode("CIRCLE")
             binding.btnCircle.setBackgroundColor(Color.parseColor("#d8e8f5"))
+            binding.btnLine.background = null
+            binding.btnRectangle.background = null
+            binding.btnDoodle.background = null
         }
         binding.btnLine.setOnClickListener {
             drawingView.setMode("LINE")
+            binding.btnLine.setBackgroundColor(Color.parseColor("#d8e8f5"))
+            binding.btnRectangle.background = null
+            binding.btnCircle.background = null
+            binding.btnDoodle.background = null
         }
     }
 

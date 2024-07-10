@@ -6,19 +6,17 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <ImageView
-        android:id="@+id/wavyLine"
+    <com.lutech.paintV3.StrokeWidthView
+        android:id="@+id/M_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/wavyline"
-        android:layout_gravity="center"/>
+        android:layout_height="100dp" />
+
     <SeekBar
         android:id="@+id/seekbarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"
-        android:progress="10"
-        />
+        android:progress="10" />
 
     <LinearLayout
         android:layout_width="match_parent"
