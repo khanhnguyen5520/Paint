@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <com.lutech.paintV3.StrokeWidthView
+    <com.lutech.paintV3.model.StrokeWidthView
         android:id="@+id/M_view"
         android:layout_width="match_parent"
         android:layout_height="100dp" />

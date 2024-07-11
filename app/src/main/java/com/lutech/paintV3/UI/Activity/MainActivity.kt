@@ -34,10 +34,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.lutech.paintV3.DrawingView
+import com.lutech.paintV3.model.DrawingView
 import com.lutech.paintV3.NoteWidgetProvider
 import com.lutech.paintV3.R
-import com.lutech.paintV3.StrokeWidthView
+import com.lutech.paintV3.model.StrokeWidthView
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
