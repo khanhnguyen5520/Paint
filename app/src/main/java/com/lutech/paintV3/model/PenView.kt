@@ -8,7 +8,9 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 
-class MarkerView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class PenView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
     private var paintColor = Color.RED
     private var penHeight2 = 100f
 
@@ -35,46 +37,42 @@ class MarkerView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         val x = width / 2f
         val y = height / 2f
-        val penWidth = 90f
+        val penWidth = 55f
         val penHeight = penHeight2
         val gripHeight = 53f
         val tipHeight = 60f
 
-        // Draw the pen tip
+        // Draw the pen tip (triangle with curved tail)
         val tipPath = Path().apply {
-            moveTo(x - penWidth / 6, y - penHeight / 2 + tipHeight - 20f)
-            lineTo(x - penWidth / 6, y - penHeight / 2 + tipHeight + 3f)
-            lineTo(x + penWidth / 6, y - penHeight / 2 + tipHeight + 3f)
+            moveTo(x - penWidth / 5, y - penHeight / 2 + tipHeight)
+            quadTo(
+                x,
+                y - penHeight / 2,
+                x + penWidth / 5,
+                y - penHeight / 2 + tipHeight
+            ) // Curved head
+            lineTo(x, y - penHeight / 2 + tipHeight + 20) // Connect back to base of tip
             close()
         }
         canvas.drawPath(tipPath, tipPaint)
 
-        canvas.drawRect(
-            x - penWidth / 6,
-            y - penHeight / 2 + tipHeight + 3f,
-            x + penWidth / 6,
-            y - penHeight / 2 + tipHeight + 10f,
-            tipPaint
-        )
-
-        // Draw the head grip
-        canvas.drawRect(
-            x - penWidth / 4,
-            y - penHeight / 2 + tipHeight + 10f,
-            x + penWidth / 4,
-            y - penHeight / 2 + tipHeight + 27f,
-            gripPaint
-        )
-
-        // Draw the body grip
+        // Draw the grip (trapezoid with slightly curved inward)
         val gripPath = Path().apply {
-            moveTo(x - penWidth / 4, y - penHeight / 2 + tipHeight + 25f)
-            lineTo(x - penWidth / 2, y - penHeight / 2 + tipHeight + gripHeight)
+            moveTo(x - penWidth / 4, y - penHeight / 2 + tipHeight)
+            quadTo(
+                x - penWidth / 3,
+                y - penHeight / 2 + tipHeight + gripHeight,
+                x - penWidth / 2,
+                y - penHeight / 2 + tipHeight + gripHeight
+            ) // Curved inward
+
             lineTo(x + penWidth / 2, y - penHeight / 2 + tipHeight + gripHeight)
-            lineTo(
+            quadTo(
+                x + penWidth / 3,
+                y - penHeight / 2 + tipHeight + gripHeight,
                 x + penWidth / 4,
-                y - penHeight / 2 + tipHeight + 25f
-            )
+                y - penHeight / 2 + tipHeight
+            ) // Curved inward
             close()
         }
         canvas.drawPath(gripPath, gripPaint)

@@ -112,34 +112,24 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="200px"
         android:gravity="bottom|center_horizontal"
         android:orientation="horizontal">
 
-        <com.lutech.paintV3.model.MarkerView
-            android:layout_width="100dp"
-            android:layout_height="50dp"/>
-        <ImageButton
+        <com.lutech.paintV3.model.PenView
             android:id="@+id/btnPen"
-            android:layout_width="60dp"
-            android:layout_height="100px"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/pen"
-            android:backgroundTint="@color/yellow" />
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" />
 
-        <ImageButton
+        <com.lutech.paintV3.model.MarkerView
             android:id="@+id/btnMarker"
             android:layout_width="50dp"
-            android:layout_height="100px"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/ic_marker"
-            android:backgroundTint="@color/yellow" />
+            android:layout_height="wrap_content" />
 
-        <ImageButton
+        <com.lutech.paintV3.model.EraserView
             android:id="@+id/btnErase"
-            android:layout_width="wrap_content"
-            android:layout_height="100px"
-            android:background="@drawable/eraser" />
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/add_widget_button"
