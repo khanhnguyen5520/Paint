@@ -20,6 +20,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -38,10 +39,6 @@ import com.lutech.paintV3.R
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.lutech.paintV3.model.DrawingView
 import com.lutech.paintV3.model.StrokeWidthView
-import com.skydoves.colorpickerview.ColorEnvelope
-import com.skydoves.colorpickerview.ColorPickerView
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -264,6 +261,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private var selectedColorHSV: FloatArray? = null
+
     private fun openColorPicker(alpha: Int) {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_color, null)
@@ -273,27 +272,71 @@ class MainActivity : AppCompatActivity() {
         val popupWindow = PopupWindow(popupView, width, height, true)
         popupWindow.elevation = 20F
 
-        // show the popup window
+        // Show the popup window
         popupWindow.showAtLocation(binding.root, Gravity.BOTTOM, 0, 400)
 
-        val colorPickerView = popupView.findViewById<ColorPickerView>(R.id.colorPickerView)
-        val brightnessSlideBar = popupView.findViewById<BrightnessSlideBar>(R.id.brightnessSlide)
+        val colorGrid = popupView.findViewById<GridLayout>(R.id.colorGrid)
+        val brightnessSlideBar = popupView.findViewById<SeekBar>(R.id.brightnessSlide)
 
-        colorPickerView.setColorListener(object : ColorEnvelopeListener {
-            @SuppressLint("ResourceType")
-            override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
-                drawingView.setColor(envelope.color, alpha)
-                strokeView.setColor(envelope.color)
-                seekBar.progressDrawable.setColorFilter(
-                    envelope.color, PorterDuff.Mode.SRC_IN
-                )
-                seekBar.thumb.setColorFilter(
-                    envelope.color, PorterDuff.Mode.SRC_IN
-                )
-                binding.btnPen.setColor(envelope.color)
+        val colors = generateColors()
+        populateColorGrid(colorGrid, colors, alpha)
+
+        brightnessSlideBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (selectedColorHSV != null) {
+                    selectedColorHSV!![2] = progress / 100.0f
+                    val adjustedColor = Color.HSVToColor(selectedColorHSV!!)
+                    drawingView.setColor(adjustedColor, alpha)
+                    strokeView.setColor(adjustedColor)
+                    seekBar?.progressDrawable?.setColorFilter(adjustedColor, PorterDuff.Mode.SRC_IN)
+                    seekBar?.thumb?.setColorFilter(adjustedColor, PorterDuff.Mode.SRC_IN)
+                    if (alpha == 256) {
+                        binding.btnPen.setColor(adjustedColor)
+                    } else {
+                        binding.btnMarker.setColor(adjustedColor)
+                    }
+                }
             }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-        colorPickerView.attachBrightnessSlider(brightnessSlideBar)
+    }
+
+    private fun generateColors(): List<FloatArray> {
+        val colors = mutableListOf<FloatArray>()
+        for (i in 0 until 120) {
+            val hue = (i * 3) % 360 // Spread hue across the spectrum
+            val hsv = floatArrayOf(hue.toFloat(), 1.0f, 1.0f)
+            colors.add(hsv)
+        }
+        return colors
+    }
+
+    private fun populateColorGrid(colorGrid: GridLayout, colors: List<FloatArray>, alpha: Int) {
+        for (hsv in colors) {
+            val color = Color.HSVToColor(hsv)
+            val colorButton = ImageButton(this)
+            val params = GridLayout.LayoutParams()
+            params.width = 40
+            params.height = 40
+            colorButton.layoutParams = params
+            colorButton.setBackgroundColor(color)
+            colorButton.setOnClickListener {
+                selectedColorHSV = hsv
+                val adjustedColor = Color.HSVToColor(hsv)
+                drawingView.setColor(adjustedColor, alpha)
+                strokeView.setColor(adjustedColor)
+                seekBar.progressDrawable.setColorFilter(adjustedColor, PorterDuff.Mode.SRC_IN)
+                seekBar.thumb.setColorFilter(adjustedColor, PorterDuff.Mode.SRC_IN)
+                if (alpha == 256) {
+                    binding.btnPen.setColor(adjustedColor)
+                } else {
+                    binding.btnMarker.setColor(adjustedColor)
+                }
+            }
+            colorGrid.addView(colorButton)
+        }
     }
 
     private fun showEraserPopup() {

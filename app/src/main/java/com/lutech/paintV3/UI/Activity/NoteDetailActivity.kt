@@ -3,35 +3,34 @@ package com.lutech.paintV3.UI.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.lutech.paintV3.NoteWidgetProvider
 import com.lutech.paintV3.R
+import com.lutech.paintV3.databinding.ActivityNoteDetailBinding
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class NoteDetailActivity : AppCompatActivity() {
 
-    private lateinit var editTextTitle: EditText
-    private lateinit var editTextContent: EditText
-    private lateinit var dateTextView: TextView
+    private lateinit var binding: ActivityNoteDetailBinding
     private var appWidgetId: Int = AppWidgetManager.INVALID_APPWIDGET_ID
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_detail)
 
-        editTextTitle = findViewById(R.id.editTextTitle)
-        editTextContent = findViewById(R.id.editTextContent)
         val buttonUpdate: Button = findViewById(R.id.buttonUpdate)
-        dateTextView = findViewById(R.id.tvDate)
-
 
         // Get the appWidgetId from the intent
         appWidgetId = intent.getIntExtra(
@@ -53,18 +52,17 @@ class NoteDetailActivity : AppCompatActivity() {
         val title = sharedPrefs.getString("widget_title_$appWidgetId", "")
         val content = sharedPrefs.getString("widget_content_$appWidgetId", "")
         val date = sharedPrefs.getString("widget_date_$appWidgetId", "")
-        editTextTitle.setText(title)
-        editTextContent.setText(content)
-        dateTextView.text = date
+        binding.editTextTitle.setText(title)
+        binding.editTextContent.setText(content)
+        binding.tvDate.text = date
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateNote() {
-        val newTitle = editTextTitle.text.toString()
-        val newContent = editTextContent.text.toString()
+        val newTitle = binding.editTextTitle.text.toString()
+        val newContent = binding.editTextContent.text.toString()
         val newDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-
 
         // Save the updated note data
         NoteWidgetProvider.updateNoteData(this, appWidgetId, newTitle, newContent, newDate)

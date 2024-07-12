@@ -1,31 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_layout"
     android:orientation="vertical"
     android:padding="15dp">
 
-    <TextView
-        android:id="@+id/testColor"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:text="MÀU SẮC"
-        android:textColor="@color/black" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
-    <com.skydoves.colorpickerview.ColorPickerView
-        android:id="@+id/colorPickerView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/testColor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="MÀU SẮC"
+            android:textColor="@color/black" />
 
-    <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+        <Button
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_cancel" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/colorGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:columnCount="12"
+        android:orientation="horizontal"
+        android:rowCount="10" />
+
+    <SeekBar
         android:id="@+id/brightnessSlide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:selector_BrightnessSlider="@drawable/colorpickerview_wheel" />
+        android:layout_marginTop="16dp"
+        android:max="100" />
 </LinearLayout>

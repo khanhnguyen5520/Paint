@@ -2,6 +2,7 @@ package com.lutech.paintV3.model
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -13,6 +14,8 @@ import android.os.Environment
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.lutech.paintV3.NoteWidgetProvider
+import com.lutech.paintV3.UI.Activity.NoteDetailActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -241,6 +244,8 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         val fileName = "drawing_${System.currentTimeMillis()}.jpg"
         val file = File(directory, fileName)
 
+        //NoteWidgetProvider.file = file
+
         return try {
             val fileOutputStream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
@@ -252,6 +257,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             false
         }
     }
+
 }
 
 
