@@ -3,9 +3,6 @@ package com.lutech.paintV3.UI.Activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -27,6 +24,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,7 +32,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.lutech.paintV3.NoteWidgetProvider
 import com.lutech.paintV3.R
 import com.lutech.paintV3.databinding.ActivityMainBinding
 import com.lutech.paintV3.model.DrawingView
@@ -57,36 +54,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var seekBar: SeekBar
     private var selectedColorHSV: FloatArray? = null
 
+    companion object {
+        const val ACTION_SHOW_BOTTOM_SHEET = "com.lutech.paintV3.UI.Activity.ACTION_SHOW_BOTTOM_SHEET"
+    }
+
     private lateinit var currentPhotoPath: String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         drawingView = findViewById(R.id.paint_view)
-
         bottomBar()
         toolBar()
         toggleBar()
 
+        if (intent?.action == ACTION_SHOW_BOTTOM_SHEET) {
+            showBottomSheet()
+        }
+
         val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
         buttonAddWidget.setOnClickListener {
-//            val appWidgetManager = AppWidgetManager.getInstance(this)
-//            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
-//                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
-//                val successCallback = PendingIntent.getBroadcast(
-//                    this, 0, pinnedWidgetCallbackIntent,
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-//                    } else {
-//                        PendingIntent.FLAG_UPDATE_CURRENT
-//                    }
-//                )
-//                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-//            }
             val intent = Intent(this, WidgetListActivity::class.java)
             startActivity(intent)
         }
@@ -214,8 +204,8 @@ class MainActivity : AppCompatActivity() {
             seekBar.thumb.setColorFilter(Color.parseColor("#FFB74D"), PorterDuff.Mode.SRC_IN)
             strokeView.setColor(Color.parseColor("#FFB74D"))
 
-            popupView.findViewById<ImageView>(R.id.btnOrange).visibility = View.VISIBLE
-            hideOtherCircles(R.id.btnOrange, popupView)
+            popupView.findViewById<ImageView>(R.id.btnOrangeCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnOrangeCircle, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnYellow).setOnClickListener {
@@ -234,8 +224,8 @@ class MainActivity : AppCompatActivity() {
             )
             strokeView.setColor(Color.YELLOW)
 
-            popupView.findViewById<ImageView>(R.id.btnYellow).visibility = View.VISIBLE
-            hideOtherCircles(R.id.btnYellow, popupView)
+            popupView.findViewById<ImageView>(R.id.btnYellowCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnYellowCircle, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnGreen).setOnClickListener {
@@ -252,8 +242,8 @@ class MainActivity : AppCompatActivity() {
                 Color.GREEN, PorterDuff.Mode.SRC_IN
             )
             strokeView.setColor(Color.GREEN)
-            popupView.findViewById<ImageView>(R.id.btnGreen).visibility = View.VISIBLE
-            hideOtherCircles(R.id.btnGreen, popupView)
+            popupView.findViewById<ImageView>(R.id.btnGreenCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnGreenCircle, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnBlue).setOnClickListener {
@@ -271,8 +261,8 @@ class MainActivity : AppCompatActivity() {
             )
             strokeView.setColor(Color.BLUE)
 
-            popupView.findViewById<ImageView>(R.id.btnBlue).visibility = View.VISIBLE
-            hideOtherCircles(R.id.btnBlue, popupView)
+            popupView.findViewById<ImageView>(R.id.btnBlueCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnBlueCircle, popupView)
         }
 
         popupView.findViewById<ImageView>(R.id.btnColor).setOnClickListener {
@@ -431,7 +421,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleBar() {
-
         binding.toggleButton.setOnClickListener {
             if (isExpanded) {
                 collapseToolBar()

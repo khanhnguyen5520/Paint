@@ -6,18 +6,11 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.RemoteViews
-import androidx.core.content.FileProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.lutech.paintV3.UI.Activity.MainActivity
 import com.lutech.paintV3.UI.Activity.NoteDetailActivity
-import java.io.File
 
 class NoteWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(
@@ -32,7 +25,6 @@ class NoteWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-//        lateinit var file: File
 
         fun updateAppWidget(
             context: Context,
@@ -75,10 +67,8 @@ class NoteWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.widget_title, title)
             views.setTextViewText(R.id.widget_content, content)
             views.setTextViewText(R.id.widget_date, date)
-
-            //setImageViewFromFile(context, file, views, R.id.widget_image)
-
             appWidgetManager.updateAppWidget(appWidgetId, views)
+            Log.e("check", "updateAppWidget:$appWidgetId, $title, $content, $date")
         }
 
         fun updateNoteData(
@@ -105,42 +95,6 @@ class NoteWidgetProvider : AppWidgetProvider() {
                 }
             }
         }
-
-//        private fun setImageViewFromFile(
-//            context: Context,
-//            mFile: File,
-//            views: RemoteViews,
-//            imageViewId: Int
-//        ) {
-//            if (mFile.exists()) {
-//                val uri: Uri = FileProvider.getUriForFile(
-//                    context,
-//                    "com.lutech.paintV3.fileprovider",
-//                    mFile
-//                )
-//                Glide.with(context)
-//                    .load(uri)
-//                    .into(object : CustomTarget<Drawable>() {
-//                        override fun onResourceReady(
-//                            resource: Drawable,
-//                            transition: Transition<in Drawable>?
-//                        ) {
-//                            views.setImageViewBitmap(imageViewId, (resource as BitmapDrawable).bitmap)
-//                            AppWidgetManager.getInstance(context).updateAppWidget(
-//                                ComponentName(context, NoteWidgetProvider::class.java),
-//                                views
-//                            )
-//                        }
-//
-//                        override fun onLoadCleared(placeholder: Drawable?) {
-//                            // Handle placeholder if needed
-//                        }
-//                    })
-//            } else {
-//                // Handle the case where the file doesn't exist
-//            }
-//        }
     }
-
 }
 

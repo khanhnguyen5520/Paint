@@ -25,12 +25,13 @@ class NoteDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNoteDetailBinding
     private var appWidgetId: Int = AppWidgetManager.INVALID_APPWIDGET_ID
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_note_detail)
 
-        val buttonUpdate: Button = findViewById(R.id.buttonUpdate)
+        binding = ActivityNoteDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Get the appWidgetId from the intent
         appWidgetId = intent.getIntExtra(
@@ -42,7 +43,7 @@ class NoteDetailActivity : AppCompatActivity() {
         loadNoteData()
 
         // Set click listener for the update button
-        buttonUpdate.setOnClickListener {
+        binding.btnUpdate.setOnClickListener {
             updateNote()
         }
     }
@@ -52,16 +53,15 @@ class NoteDetailActivity : AppCompatActivity() {
         val title = sharedPrefs.getString("widget_title_$appWidgetId", "")
         val content = sharedPrefs.getString("widget_content_$appWidgetId", "")
         val date = sharedPrefs.getString("widget_date_$appWidgetId", "")
-        binding.editTextTitle.setText(title)
-        binding.editTextContent.setText(content)
+        binding.edtTitle.setText(title)
+        binding.edtContent.setText(content)
         binding.tvDate.text = date
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateNote() {
-        val newTitle = binding.editTextTitle.text.toString()
-        val newContent = binding.editTextContent.text.toString()
+        val newTitle = binding.edtTitle.text.toString()
+        val newContent = binding.edtContent.text.toString()
         val newDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
         // Save the updated note data

@@ -57,21 +57,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Title"
+                android:hint="Title"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-
-<!--            <ImageView-->
-<!--                android:id="@+id/widget_image"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="4dp"/>-->
 
             <TextView
                 android:id="@+id/widget_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Content"
+                android:hint="Content"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -80,7 +74,7 @@
             android:id="@+id/widget_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date"
+            android:hint="Date"
             android:textColor="@color/black"
             android:textSize="13sp" />
 

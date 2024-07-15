@@ -1,18 +1,18 @@
 package com.lutech.paintV3.UI.Activity
-// WidgetListActivity.kt
 
+// WidgetListActivity.kt
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lutech.paintV3.NoteWidgetProvider
 import com.lutech.paintV3.R
+import com.lutech.paintV3.WidgetListAdapter
 
 class WidgetListActivity : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ class WidgetListActivity : AppCompatActivity() {
         val listView: ListView = findViewById(R.id.widget_list_view)
 
         val widgetNames = arrayOf("Widget 1", "Widget 2", "Widget 3")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, widgetNames)
+        val adapter = WidgetListAdapter(this, widgetNames)
         listView.adapter = adapter
 
         listView.setOnItemClickListener { _, _, position, _ ->
@@ -49,13 +49,11 @@ class WidgetListActivity : AppCompatActivity() {
             appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
             Toast.makeText(this, "$widgetName added to home screen", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(
-                this,
-                "Pinning widgets is not supported on your device",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "Pinning widgets is not supported on your device", Toast.LENGTH_SHORT).show()
         }
 
-        finish() // Close the activity after selecting the widget
+        finish()
     }
 }
+
+

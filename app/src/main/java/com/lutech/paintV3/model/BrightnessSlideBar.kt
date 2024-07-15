@@ -1,4 +1,4 @@
-package com.lutech.paintV3
+package com.lutech.paintV3.model
 
 import android.annotation.SuppressLint
 import android.content.Context
