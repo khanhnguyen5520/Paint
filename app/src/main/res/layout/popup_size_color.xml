@@ -24,53 +24,133 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btnBlack"
+        <FrameLayout
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="@color/black" />
+            android:layout_margin="5dp">
 
-        <ImageButton
-            android:id="@+id/btnRed"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="#F3F60000" />
+            <ImageButton
+                android:id="@+id/btnBlack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="@color/black" />
 
-        <ImageButton
-            android:id="@+id/btnOrange"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="@color/orange" />
+            <ImageView
+                android:id="@+id/btnBlackCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
 
-        <ImageButton
-            android:id="@+id/btnYellow"
+        <FrameLayout
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="@color/yellow" />
+            android:layout_margin="5dp">
 
-        <ImageButton
-            android:id="@+id/btnGreen"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="@color/green" />
+            <ImageButton
+                android:id="@+id/btnRed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="#F3F60000" />
 
-        <ImageButton
-            android:id="@+id/btnBlue"
+            <ImageView
+                android:id="@+id/btnRedCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/red_background"
-            android:backgroundTint="@color/blue" />
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/btnOrange"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="@color/orange" />
+
+            <ImageView
+                android:id="@+id/btnOrangeCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/btnYellow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="@color/yellow" />
+
+            <ImageView
+                android:id="@+id/btnYellowCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/btnGreen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="@color/green" />
+
+            <ImageView
+                android:id="@+id/btnGreenCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/btnBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_background"
+                android:backgroundTint="@color/blue" />
+
+            <ImageView
+                android:id="@+id/btnBlueCircle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/white_circle"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <ImageButton
             android:id="@+id/btnColor"

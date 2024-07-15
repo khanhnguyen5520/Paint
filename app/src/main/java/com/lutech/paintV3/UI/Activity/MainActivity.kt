@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     private var currentPopup: PopupWindow? = null
     private var isExpanded = true
     private lateinit var seekBar: SeekBar
+    private var selectedColorHSV: FloatArray? = null
 
     private lateinit var currentPhotoPath: String
 
@@ -72,20 +73,22 @@ class MainActivity : AppCompatActivity() {
 
         val buttonAddWidget: Button = findViewById(R.id.add_widget_button)
         buttonAddWidget.setOnClickListener {
-            val appWidgetManager = AppWidgetManager.getInstance(this)
-            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
-                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
-                val successCallback = PendingIntent.getBroadcast(
-                    this, 0, pinnedWidgetCallbackIntent,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                    } else {
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    }
-                )
-                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-            }
+//            val appWidgetManager = AppWidgetManager.getInstance(this)
+//            val myProvider = ComponentName(this, NoteWidgetProvider::class.java)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
+//                val pinnedWidgetCallbackIntent = Intent(this, NoteWidgetProvider::class.java)
+//                val successCallback = PendingIntent.getBroadcast(
+//                    this, 0, pinnedWidgetCallbackIntent,
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+//                    } else {
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                    }
+//                )
+//                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+//            }
+            val intent = Intent(this, WidgetListActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -175,6 +178,9 @@ class MainActivity : AppCompatActivity() {
                 Color.BLACK, PorterDuff.Mode.SRC_IN
             )
             strokeView.setColor(Color.BLACK)
+
+            popupView.findViewById<ImageView>(R.id.btnBlackCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnBlackCircle, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnRed).setOnClickListener {
@@ -188,6 +194,9 @@ class MainActivity : AppCompatActivity() {
             seekBar.progressDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
             seekBar.thumb.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN)
             strokeView.setColor(Color.RED)
+
+            popupView.findViewById<ImageView>(R.id.btnRedCircle).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnRedCircle, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnOrange).setOnClickListener {
@@ -204,6 +213,9 @@ class MainActivity : AppCompatActivity() {
             )
             seekBar.thumb.setColorFilter(Color.parseColor("#FFB74D"), PorterDuff.Mode.SRC_IN)
             strokeView.setColor(Color.parseColor("#FFB74D"))
+
+            popupView.findViewById<ImageView>(R.id.btnOrange).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnOrange, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnYellow).setOnClickListener {
@@ -221,6 +233,9 @@ class MainActivity : AppCompatActivity() {
                 Color.YELLOW, PorterDuff.Mode.SRC_IN
             )
             strokeView.setColor(Color.YELLOW)
+
+            popupView.findViewById<ImageView>(R.id.btnYellow).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnYellow, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnGreen).setOnClickListener {
@@ -237,6 +252,8 @@ class MainActivity : AppCompatActivity() {
                 Color.GREEN, PorterDuff.Mode.SRC_IN
             )
             strokeView.setColor(Color.GREEN)
+            popupView.findViewById<ImageView>(R.id.btnGreen).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnGreen, popupView)
         }
 
         popupView.findViewById<ImageButton>(R.id.btnBlue).setOnClickListener {
@@ -253,15 +270,32 @@ class MainActivity : AppCompatActivity() {
                 Color.BLUE, PorterDuff.Mode.SRC_IN
             )
             strokeView.setColor(Color.BLUE)
+
+            popupView.findViewById<ImageView>(R.id.btnBlue).visibility = View.VISIBLE
+            hideOtherCircles(R.id.btnBlue, popupView)
         }
 
         popupView.findViewById<ImageView>(R.id.btnColor).setOnClickListener {
             openColorPicker(alpha)
         }
-
     }
 
-    private var selectedColorHSV: FloatArray? = null
+    private fun hideOtherCircles(visibleCircleId: Int, popupView: View) {
+        val circleIds = listOf(
+            R.id.btnBlackCircle,
+            R.id.btnRedCircle,
+            R.id.btnOrangeCircle,
+            R.id.btnYellowCircle,
+            R.id.btnGreenCircle,
+            R.id.btnBlueCircle
+        )
+
+        circleIds.forEach { id ->
+            if (id != visibleCircleId) {
+                popupView.findViewById<ImageView>(id).visibility = View.GONE
+            }
+        }
+    }
 
     private fun openColorPicker(alpha: Int) {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
